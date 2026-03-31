@@ -105,7 +105,7 @@ const STATIONS: Record<string, Station> = {
     location: "Victoria Falls, Zimbabwe",
     desc: "Serving the resort town of Victoria Falls and the Hwange district with tourism updates, community news, and multi-lingual broadcasting.",
     image: BREEZE_GALLERY[0].src,
-    streamUrl: "https://stream.zeno.fm/9p57qaykqy8uv",
+    streamUrl: "https://radio.garden/api/ara/content/listen/gSEALGs7/channel.mp3",
     gallery: BREEZE_GALLERY,
     hosts: ["Timothy Hogo", "Stanley Dube", "Mkhenara"],
     shows: [
@@ -152,10 +152,15 @@ const Navbar = ({
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
-    // Navbar activates exactly when the Content layer (at 40vh) hits the top
-    const handleScroll = () => setScrolled(window.scrollY > (window.innerHeight * 0.4) - 20);
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    // Navbar activates when the corporate section's 'Our Story' button enters the top of the viewport
+    const target = document.getElementById('corporate-section');
+    if (!target) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setScrolled(entry.isIntersecting),
+      { root: null, rootMargin: '0px 0px -90% 0px', threshold: 0 }
+    );
+    observer.observe(target);
+    return () => observer.disconnect();
   }, []);
 
   return (
@@ -169,7 +174,7 @@ const Navbar = ({
         />
       </div>
 
-      <div className="hidden lg:flex flex-1 justify-center gap-24 text-black dark:text-white">
+      <div className="hidden lg:flex flex-1 justify-center pl-48 xl:pl-64 gap-16 xl:gap-24 text-black dark:text-white">
         {NAV_ITEMS.map((item) => (
           <button
             key={item.view}
@@ -272,7 +277,7 @@ const HomeView = ({ setView, playStation }: { setView: (v: View) => void, playSt
             className="relative lg:col-span-4 w-full -left-[50px] lg:left-0 hidden lg:block"
           >
             <div className="relative group/hero z-[110]">
-              <div className="hero-image-container glow-cyan w-full max-w-[280px] aspect-[1/2] lg:h-[520px] relative mx-auto lg:ml-24 xl:ml-32 bg-slate-100 dark:bg-slate-900 overflow-hidden rounded-b-[6rem] shadow-2xl">
+              <div className="hero-image-container glow-cyan w-full max-w-[260px] aspect-[1/2] lg:h-[483px] relative mx-auto lg:ml-36 xl:ml-48 bg-slate-100 dark:bg-slate-900 overflow-hidden rounded-b-[6rem] shadow-2xl">
                 <img 
                   src="/heroimage.jpg" 
                   className="w-full h-full object-cover transition-all duration-1000" 
@@ -281,16 +286,14 @@ const HomeView = ({ setView, playStation }: { setView: (v: View) => void, playSt
               </div>
 
               {/* Overlapping Play Button - Half on, Half off */}
-              <div className="absolute bottom-0 lg:ml-24 xl:ml-32 left-0 lg:left-0 translate-x-[-50%] translate-y-[50%] z-20 pointer-events-none">
+              <div className="absolute bottom-0 lg:ml-24 xl:ml-32 left-0 lg:left-0 translate-x-[calc(-50%+8px)] translate-y-[calc(50%-10px)] z-20 pointer-events-none">
                  <motion.div 
                    animate={{ scale: [1, 1.05, 1] }}
                    transition={{ duration: 4, repeat: Infinity }}
-                   className="w-32 h-32 md:w-44 md:h-44 rounded-full border border-black/10 dark:border-white/20 flex items-center justify-center backdrop-blur-xl bg-white/10 dark:bg-black/20 shadow-2xl relative"
+                   className="w-[166px] h-[166px] md:w-[228px] md:h-[228px] rounded-full border border-black/10 dark:border-white/20 flex items-center justify-center bg-black dark:bg-white shadow-2xl relative"
                  >
-                   {/* Spinning Circular Text */}
+                   {/* Non-Spinning Circular Text */}
                    <motion.div
-                     animate={{ rotate: 360 }}
-                     transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
                      className="absolute inset-0 z-0 p-1"
                    >
                      <svg viewBox="0 0 100 100" className="w-full h-full">
@@ -299,7 +302,7 @@ const HomeView = ({ setView, playStation }: { setView: (v: View) => void, playSt
                          d="M 50, 50 m -40, 0 a 40,40 0 1,1 80,0 a 40,40 0 1,1 -80,0"
                          fill="none"
                        />
-                       <text className="text-[6.5px] font-black uppercase tracking-[0.14em] fill-black/60 dark:fill-white/60">
+                       <text className="text-[6.5px] font-black uppercase tracking-[0.14em] fill-white/70 dark:fill-black/70">
                          <textPath href="#textPath" startOffset="0%">
                            Stream Skyz Metro FM & Breeze FM • Stream Skyz Metro FM & Breeze FM • 
                          </textPath>
@@ -311,9 +314,9 @@ const HomeView = ({ setView, playStation }: { setView: (v: View) => void, playSt
                      whileHover={{ scale: 1.1 }}
                      whileTap={{ scale: 0.9 }}
                      onClick={() => playStation('skyz')} 
-                     className="w-14 h-14 md:w-20 md:h-20 bg-white dark:bg-white text-black rounded-full flex items-center justify-center shadow-2xl pointer-events-auto cursor-pointer relative z-10"
+                     className="w-[72px] h-[72px] md:w-[104px] md:h-[104px] bg-white dark:bg-black text-black dark:text-white rounded-full flex items-center justify-center shadow-2xl pointer-events-auto cursor-pointer relative z-10"
                    >
-                     <Play className="text-black fill-black ml-1" size={28} />
+                     <Play className="fill-black dark:fill-white ml-1.5 md:ml-2 w-8 h-8 md:w-12 md:h-12" />
                    </motion.button>
                  </motion.div>
               </div>
@@ -360,7 +363,7 @@ const HomeView = ({ setView, playStation }: { setView: (v: View) => void, playSt
       </div>
 
       {/* Scrollable Content Layer */}
-      <div className="relative z-10 bg-white dark:bg-black transition-colors duration-500 mt-[50svh] lg:mt-[45vh] pt-12 lg:pt-20 pb-24 shadow-[0_-50px_100px_rgba(0,0,0,0.1)]">
+      <div id="corporate-section" className="relative z-10 bg-white dark:bg-black transition-colors duration-500 mt-[50svh] lg:mt-[45vh] pt-12 lg:pt-20 pb-24 shadow-[0_-50px_100px_rgba(0,0,0,0.1)]">
         
         {/* Corporate Overview */}
         <motion.div
@@ -978,7 +981,8 @@ const RadioPlayer = ({
   activeStationId,
   setActiveStationId,
   isPlayerVisible,
-  setIsPlayerVisible
+  setIsPlayerVisible,
+  playStation
 }: {
   isPlaying: boolean;
   setIsPlaying: (p: boolean) => void;
@@ -986,6 +990,7 @@ const RadioPlayer = ({
   setActiveStationId: (id: string) => void;
   isPlayerVisible: boolean;
   setIsPlayerVisible: (v: boolean) => void;
+  playStation: (id: string) => void;
 }) => {
   const [currentTime, setCurrentTime] = useState(new Date());
 
@@ -1055,20 +1060,20 @@ const RadioPlayer = ({
         initial={{ opacity: 0, y: 100 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: 100 }}
-        className="fixed bottom-6 left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] md:w-[calc(100%-4rem)] max-w-5xl bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl rounded-2xl shadow-[0_30px_60px_rgba(0,0,0,0.4)] border border-white/20 dark:border-slate-700 z-[150] overflow-hidden transition-all duration-500"
+        className="fixed bottom-6 left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] md:w-[calc(100%-4rem)] max-w-5xl bg-white dark:bg-black rounded-2xl shadow-[0_30px_60px_rgba(0,0,0,0.3)] border border-black/10 dark:border-white/10 z-[150] overflow-hidden"
       >
-        <div className="flex flex-row items-center justify-between p-4 md:p-6 gap-3 md:gap-6 border-b border-slate-100 dark:border-slate-800">
+        <div className="flex flex-row items-center justify-between p-4 md:p-6 gap-3 md:gap-6 border-b border-black/10 dark:border-white/10">
           {/* Cover & Info */}
           <div className="flex items-center gap-3 sm:gap-4 md:gap-6 min-w-0 flex-1">
-            <div className="relative w-16 h-16 sm:w-20 sm:h-20 lg:w-28 lg:h-28 rounded-xl overflow-hidden flex-shrink-0 shadow-lg border border-slate-200 dark:border-white/10">
-              <img src={station.image} className={`w-full h-full object-cover transition-transform duration-700 ${isPlaying ? 'scale-110' : 'scale-100'}`} />
+            <div className="relative w-16 h-16 sm:w-20 sm:h-20 lg:w-28 lg:h-28 rounded-xl overflow-hidden flex-shrink-0 shadow-lg border border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5">
+              <img src={activeStationId === 'skyz' ? '/skyzlogo.png' : '/breezelogo.png'} className={`w-full h-full object-contain p-2 transition-transform duration-700 ${isPlaying ? 'scale-110' : 'scale-100'}`} />
               {isPlaying && (
                 <div className="absolute inset-0 flex items-center justify-center bg-black/30">
                   <div className="flex gap-1 sm:gap-1.5 items-end h-6 sm:h-10">
                     {[...Array(4)].map((_, i) => (
                       <motion.div
                         key={i}
-                        className="w-1.5 sm:w-2 bg-[#F58220] rounded-full"
+                        className="w-1.5 sm:w-2 bg-white rounded-full"
                         animate={{ height: ['20%', '100%', '40%', '80%', '20%'] }}
                         transition={{ duration: 0.6, repeat: Infinity, delay: i * 0.15 }}
                       />
@@ -1081,10 +1086,10 @@ const RadioPlayer = ({
             <div className="flex flex-col min-w-0 justify-center">
               <div className="inline-flex items-center gap-1.5 mb-1 sm:mb-2">
                 <span className={`w-2 h-2 rounded-full ${isPlaying ? 'bg-red-500 animate-pulse shadow-[0_0_8px_rgba(239,68,68,0.8)]' : 'bg-slate-400'}`}></span>
-                <span className="text-[#F58220] text-[9px] sm:text-[10px] md:text-xs font-black uppercase tracking-[0.2em]">{isPlaying ? 'Live on Air' : 'Radio Ready'}</span>
+                <span className="text-black dark:text-white text-[9px] sm:text-[10px] md:text-xs font-black uppercase tracking-[0.2em]">{isPlaying ? 'Live on Air' : 'Radio Ready'}</span>
               </div>
-              <h3 className="text-slate-800 dark:text-slate-100 font-black text-base sm:text-xl md:text-2xl truncate leading-tight tracking-tight">{station.name}</h3>
-              <p className="text-slate-500 dark:text-slate-400 text-[10px] sm:text-xs md:text-sm truncate font-bold uppercase tracking-wider mt-0.5">{station.freq} • {station.location}</p>
+              <h3 className="text-black dark:text-white font-black text-base sm:text-xl md:text-2xl truncate leading-tight tracking-tight">{station.name}</h3>
+              <p className="text-black/50 dark:text-white/50 text-[10px] sm:text-xs md:text-sm truncate font-bold uppercase tracking-wider mt-0.5">{station.freq} • {station.location}</p>
             </div>
           </div>
 
@@ -1092,13 +1097,13 @@ const RadioPlayer = ({
           <div className="flex items-center gap-2 sm:gap-4 md:gap-6 flex-shrink-0">
             <button
               onClick={() => setIsPlaying(!isPlaying)}
-              className="w-12 h-12 sm:w-16 sm:h-16 md:w-24 md:h-24 rounded-full bg-[#20388F] dark:bg-[#F58220] text-white flex items-center justify-center hover:scale-105 active:scale-95 transition-all shadow-xl md:shadow-2xl group flex-shrink-0"
+              className="w-12 h-12 sm:w-16 sm:h-16 md:w-24 md:h-24 rounded-full bg-black dark:bg-white text-white dark:text-black flex items-center justify-center hover:scale-105 active:scale-95 transition-all shadow-xl md:shadow-2xl group flex-shrink-0"
             >
               {isPlaying ? <Pause size={18} fill="currentColor" className="sm:w-6 sm:h-6 md:w-9 md:h-9" /> : <Play size={18} fill="currentColor" className="ml-1 sm:w-6 sm:h-6 md:w-9 md:h-9" />}
             </button>
             <button
               onClick={() => setIsPlayerVisible(false)}
-              className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30 transition-all border border-transparent hover:border-red-200/50 flex-shrink-0"
+              className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center text-black/40 dark:text-white/40 hover:text-black dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5 transition-all border border-transparent hover:border-black/10 dark:hover:border-white/10 flex-shrink-0"
             >
               <X size={20} className="sm:w-5 sm:h-5 md:w-6 md:h-6" />
             </button>
@@ -1106,48 +1111,48 @@ const RadioPlayer = ({
         </div>
 
         {/* Quick Switch (Scrollable Row) */}
-        <div className="flex overflow-x-auto gap-2 px-4 md:px-6 py-3 border-b border-slate-100 dark:border-slate-800 scrollbar-hide">
+        <div className="flex overflow-x-auto gap-2 px-4 md:px-6 py-3 border-b border-black/10 dark:border-white/10 scrollbar-hide">
           {Object.values(STATIONS).map((s) => (
             <button
               key={s.id}
-              onClick={() => setActiveStationId(s.id)}
-              className={`flex-shrink-0 text-[10px] sm:text-xs px-5 py-2 rounded-full font-black tracking-widest uppercase transition-all hover:scale-105 active:scale-95 ${activeStationId === s.id ? 'bg-[#20388F] dark:bg-[#F58220] text-white shadow-lg' : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700'}`}
+              onClick={() => playStation(s.id)}
+              className={`flex-shrink-0 text-[10px] sm:text-xs px-5 py-2 rounded-full font-black tracking-widest uppercase transition-all hover:scale-105 active:scale-95 ${activeStationId === s.id ? 'bg-black dark:bg-white text-white dark:text-black shadow-lg' : 'bg-black/5 dark:bg-white/5 text-black/60 dark:text-white/60 hover:bg-black/10 dark:hover:bg-white/10'}`}
             >
-              {s.id}
+              {s.name}
             </button>
           ))}
         </div>
         
         {/* Schedule Extension Segment */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4 p-4 md:p-6 bg-slate-50/50 dark:bg-slate-900/50 rounded-b-2xl max-h-[45vh] lg:max-h-[55vh] overflow-y-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4 p-4 md:p-6 bg-black/[0.03] dark:bg-white/[0.03] rounded-b-2xl max-h-[45vh] lg:max-h-[55vh] overflow-y-auto">
            {/* Current Show */}
-           <div className="flex items-center gap-3 md:gap-4 bg-white dark:bg-slate-800 p-3 md:p-4 rounded-xl border border-slate-100 dark:border-slate-700 shadow-sm relative overflow-hidden group">
-              <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-[#20388F] dark:bg-[#F58220]"></div>
-              <div className="w-10 h-10 md:w-14 md:h-14 rounded-full bg-blue-50 dark:bg-slate-700 flex items-center justify-center text-[#20388F] dark:text-[#F58220] flex-shrink-0">
+           <div className="flex items-center gap-3 md:gap-4 bg-white dark:bg-black p-3 md:p-4 rounded-xl border border-black/10 dark:border-white/10 shadow-sm relative overflow-hidden group">
+              <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-black dark:bg-white"></div>
+              <div className="w-10 h-10 md:w-14 md:h-14 rounded-full bg-black/5 dark:bg-white/5 flex items-center justify-center text-black dark:text-white flex-shrink-0">
                 <Mic2 size={20} className="md:w-6 md:h-6" />
               </div>
               <div className="flex-1 min-w-0">
                  <div className="flex flex-wrap items-center gap-1.5 md:gap-2 mb-1">
-                   <span className="bg-[#20388F]/10 dark:bg-[#F58220]/10 text-[#20388F] dark:text-[#F58220] text-[9px] md:text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded text-nowrap">Now Playing</span>
-                   <span className="text-slate-500 dark:text-slate-400 text-[10px] md:text-xs font-bold">{currentShow.time}</span>
+                   <span className="bg-black/10 dark:bg-white/10 text-black dark:text-white text-[9px] md:text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded text-nowrap">Now Playing</span>
+                   <span className="text-black/50 dark:text-white/50 text-[10px] md:text-xs font-bold">{currentShow.time}</span>
                  </div>
-                 <h4 className="font-bold text-slate-800 dark:text-slate-100 text-sm md:text-base truncate">{currentShow.name}</h4>
-                 <p className="text-slate-500 dark:text-slate-400 text-xs md:text-sm truncate mt-0.5">with {currentShow.host}</p>
+                 <h4 className="font-bold text-black dark:text-white text-sm md:text-base truncate">{currentShow.name}</h4>
+                 <p className="text-black/50 dark:text-white/50 text-xs md:text-sm truncate mt-0.5">with {currentShow.host}</p>
               </div>
            </div>
            
            {/* Next Show */}
-           <div className="flex items-center gap-3 md:gap-4 bg-white dark:bg-slate-800 p-3 md:p-4 rounded-xl border border-slate-100 dark:border-slate-700 shadow-sm opacity-90 hover:opacity-100 transition-opacity group">
-              <div className="w-10 h-10 md:w-14 md:h-14 rounded-full bg-slate-50 dark:bg-slate-700/50 flex items-center justify-center text-slate-400 dark:text-slate-500 flex-shrink-0">
+           <div className="flex items-center gap-3 md:gap-4 bg-white dark:bg-black p-3 md:p-4 rounded-xl border border-black/10 dark:border-white/10 shadow-sm opacity-80 hover:opacity-100 transition-opacity group">
+              <div className="w-10 h-10 md:w-14 md:h-14 rounded-full bg-black/5 dark:bg-white/5 flex items-center justify-center text-black/40 dark:text-white/40 flex-shrink-0">
                 <Clock size={20} className="md:w-6 md:h-6" />
               </div>
               <div className="flex-1 min-w-0">
                  <div className="flex flex-wrap items-center gap-1.5 md:gap-2 mb-1">
-                   <span className="bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-[9px] md:text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded text-nowrap">Up Next</span>
-                   <span className="text-slate-500 dark:text-slate-400 text-[10px] md:text-xs font-bold">{nextShow.time.split(' - ')[0]} • Run Time: {calculateRunTime(nextShow.time)}</span>
+                   <span className="bg-black/5 dark:bg-white/5 text-black/70 dark:text-white/70 text-[9px] md:text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded text-nowrap">Up Next</span>
+                   <span className="text-black/50 dark:text-white/50 text-[10px] md:text-xs font-bold">{nextShow.time.split(' - ')[0]} • Run Time: {calculateRunTime(nextShow.time)}</span>
                  </div>
-                 <h4 className="font-bold text-slate-800 dark:text-slate-100 text-sm md:text-base truncate">{nextShow.name}</h4>
-                 <p className="text-slate-500 dark:text-slate-400 text-xs md:text-sm truncate mt-0.5">with {nextShow.host}</p>
+                 <h4 className="font-bold text-black dark:text-white text-sm md:text-base truncate">{nextShow.name}</h4>
+                 <p className="text-black/50 dark:text-white/50 text-xs md:text-sm truncate mt-0.5">with {nextShow.host}</p>
               </div>
            </div>
         </div>
@@ -1308,9 +1313,9 @@ export default function App() {
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: '100%' }}
             transition={{ type: "spring", damping: 25, stiffness: 200 }}
-            className="fixed inset-0 bg-white dark:bg-slate-950 z-[200] flex flex-col md:hidden"
+            className="fixed inset-0 bg-white dark:bg-black z-[200] flex flex-col md:hidden"
           >
-            <div className="flex justify-between items-center gap-4 p-4 sm:p-6 border-b border-slate-100 dark:border-slate-800">
+            <div className="flex justify-between items-center gap-4 p-4 sm:p-6 border-b border-black/10 dark:border-white/10">
               <BrandLogo compact className="max-w-[180px] sm:max-w-[220px]" />
               <button
                 onClick={() => setIsMenuOpen(false)}
@@ -1330,17 +1335,17 @@ export default function App() {
                   onClick={() => { setView(item.view); setIsMenuOpen(false); }}
                   className="text-left group"
                 >
-                  <span className={`text-4xl sm:text-5xl font-black block transition-all ${view === item.view ? 'text-[#F58220] translate-x-4' : 'text-slate-800 dark:text-slate-100 group-hover:translate-x-2'}`}>
+                  <span className={`text-4xl sm:text-5xl font-black block transition-all ${view === item.view ? 'text-black dark:text-white translate-x-4' : 'text-black/40 dark:text-white/40 group-hover:translate-x-2 group-hover:text-black dark:group-hover:text-white'}`}>
                     {item.label}
                   </span>
                 </motion.button>
               ))}
             </div>
 
-            <div className="p-6 sm:p-10 border-t border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50">
+            <div className="p-6 sm:p-10 border-t border-black/10 dark:border-white/10">
               <button
                 onClick={() => { playStation('skyz'); setIsMenuOpen(false); }}
-                className="w-full bg-[#20388F] text-white py-4 sm:py-5 rounded-lg text-base sm:text-lg font-bold flex items-center justify-center gap-3 shadow-xl active:scale-95 transition-transform"
+                className="w-full bg-black dark:bg-white text-white dark:text-black py-4 sm:py-5 rounded-full text-base sm:text-lg font-black flex items-center justify-center gap-3 shadow-xl active:scale-95 transition-transform"
               >
                 <Play fill="currentColor" /> Listen Live Now
               </button>
@@ -1378,6 +1383,7 @@ export default function App() {
         setActiveStationId={setActiveStationId}
         isPlayerVisible={isPlayerVisible}
         setIsPlayerVisible={setIsPlayerVisible}
+        playStation={playStation}
       />
 
       <ThemeToggle theme={theme} setTheme={setTheme} />
