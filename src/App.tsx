@@ -1057,100 +1057,97 @@ const RadioPlayer = ({
         exit={{ opacity: 0, y: 100 }}
         className="fixed bottom-6 left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] md:w-[calc(100%-4rem)] max-w-5xl bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl rounded-2xl shadow-[0_30px_60px_rgba(0,0,0,0.4)] border border-white/20 dark:border-slate-700 z-[150] overflow-hidden transition-all duration-500"
       >
-        <div className="flex flex-col md:flex-row items-center p-5 md:p-6 gap-6 md:gap-8 border-b border-slate-100 dark:border-slate-800">
-          {/* Cover/Logo with Pulse */}
-          <div className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-xl overflow-hidden flex-shrink-0 shadow-lg border border-slate-200 dark:border-white/10">
-            <img src={station.image} className={`w-full h-full object-cover transition-transform duration-700 ${isPlaying ? 'scale-110' : 'scale-100'}`} />
-            {isPlaying && (
-              <div className="absolute inset-0 flex items-center justify-center bg-black/30">
-                <div className="flex gap-1.5 items-end h-10">
-                  {[...Array(4)].map((_, i) => (
-                    <motion.div
-                      key={i}
-                      className="w-2 bg-[#F58220] rounded-full"
-                      animate={{ height: ['20%', '100%', '40%', '80%', '20%'] }}
-                      transition={{ duration: 0.6, repeat: Infinity, delay: i * 0.15 }}
-                    />
-                  ))}
+        <div className="flex flex-row items-center justify-between p-4 md:p-6 gap-3 md:gap-6 border-b border-slate-100 dark:border-slate-800">
+          {/* Cover & Info */}
+          <div className="flex items-center gap-3 sm:gap-4 md:gap-6 min-w-0 flex-1">
+            <div className="relative w-16 h-16 sm:w-20 sm:h-20 lg:w-28 lg:h-28 rounded-xl overflow-hidden flex-shrink-0 shadow-lg border border-slate-200 dark:border-white/10">
+              <img src={station.image} className={`w-full h-full object-cover transition-transform duration-700 ${isPlaying ? 'scale-110' : 'scale-100'}`} />
+              {isPlaying && (
+                <div className="absolute inset-0 flex items-center justify-center bg-black/30">
+                  <div className="flex gap-1 sm:gap-1.5 items-end h-6 sm:h-10">
+                    {[...Array(4)].map((_, i) => (
+                      <motion.div
+                        key={i}
+                        className="w-1.5 sm:w-2 bg-[#F58220] rounded-full"
+                        animate={{ height: ['20%', '100%', '40%', '80%', '20%'] }}
+                        transition={{ duration: 0.6, repeat: Infinity, delay: i * 0.15 }}
+                      />
+                    ))}
+                  </div>
                 </div>
+              )}
+            </div>
+
+            <div className="flex flex-col min-w-0 justify-center">
+              <div className="inline-flex items-center gap-1.5 mb-1 sm:mb-2">
+                <span className={`w-2 h-2 rounded-full ${isPlaying ? 'bg-red-500 animate-pulse shadow-[0_0_8px_rgba(239,68,68,0.8)]' : 'bg-slate-400'}`}></span>
+                <span className="text-[#F58220] text-[9px] sm:text-[10px] md:text-xs font-black uppercase tracking-[0.2em]">{isPlaying ? 'Live on Air' : 'Radio Ready'}</span>
               </div>
-            )}
-          </div>
-
-          {/* Info & Status */}
-          <div className="flex-1 text-center md:text-left min-w-0">
-            <div className="inline-flex items-center gap-2 mb-3 px-3 py-1.5 rounded-full bg-[#F58220]/10 border border-[#F58220]/20">
-              <span className={`w-2.5 h-2.5 rounded-full ${isPlaying ? 'bg-red-500 animate-pulse shadow-[0_0_8px_rgba(239,68,68,0.8)]' : 'bg-slate-400'}`}></span>
-              <span className="text-[#F58220] text-xs font-black uppercase tracking-[0.2em]">{isPlaying ? 'Live on Air' : 'Radio Ready'}</span>
-            </div>
-            <h3 className="text-slate-800 dark:text-slate-100 font-black text-2xl truncate leading-tight tracking-tight mt-1 mb-1">{station.name}</h3>
-            <p className="text-slate-500 dark:text-slate-400 text-sm truncate font-bold uppercase tracking-wider">{station.freq} • {station.location}</p>
-
-            {/* Quick Switch */}
-            <div className="flex gap-3 mt-4 justify-center md:justify-start">
-              {Object.values(STATIONS).map((s) => (
-                <button
-                  key={s.id}
-                  onClick={() => setActiveStationId(s.id)}
-                  className={`text-[10px] sm:text-xs px-5 py-2 rounded-full font-black tracking-widest uppercase transition-all hover:scale-105 active:scale-95 ${activeStationId === s.id ? 'bg-[#20388F] dark:bg-[#F58220] text-white shadow-lg' : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700'}`}
-                >
-                  {s.id}
-                </button>
-              ))}
+              <h3 className="text-slate-800 dark:text-slate-100 font-black text-base sm:text-xl md:text-2xl truncate leading-tight tracking-tight">{station.name}</h3>
+              <p className="text-slate-500 dark:text-slate-400 text-[10px] sm:text-xs md:text-sm truncate font-bold uppercase tracking-wider mt-0.5">{station.freq} • {station.location}</p>
             </div>
           </div>
 
-          {/* Player Logic Visual */}
-          <div className="flex items-center gap-6 mt-4 md:mt-0">
-            <div className="flex flex-col items-center gap-2">
-              <button
-                onClick={() => setIsPlaying(!isPlaying)}
-                className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-[#20388F] dark:bg-[#F58220] text-white flex items-center justify-center hover:scale-105 active:scale-95 transition-all shadow-2xl group"
-              >
-                {isPlaying ? <Pause size={36} fill="currentColor" /> : <Play size={36} fill="currentColor" className="ml-1.5" />}
-              </button>
-              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">Play / Pause</span>
-            </div>
-
+          {/* Controls */}
+          <div className="flex items-center gap-2 sm:gap-4 md:gap-6 flex-shrink-0">
+            <button
+              onClick={() => setIsPlaying(!isPlaying)}
+              className="w-12 h-12 sm:w-16 sm:h-16 md:w-24 md:h-24 rounded-full bg-[#20388F] dark:bg-[#F58220] text-white flex items-center justify-center hover:scale-105 active:scale-95 transition-all shadow-xl md:shadow-2xl group flex-shrink-0"
+            >
+              {isPlaying ? <Pause size={18} fill="currentColor" className="sm:w-6 sm:h-6 md:w-9 md:h-9" /> : <Play size={18} fill="currentColor" className="ml-1 sm:w-6 sm:h-6 md:w-9 md:h-9" />}
+            </button>
             <button
               onClick={() => setIsPlayerVisible(false)}
-              className="w-12 h-12 rounded-full flex items-center justify-center text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30 transition-all border border-transparent hover:border-red-200/50"
+              className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30 transition-all border border-transparent hover:border-red-200/50 flex-shrink-0"
             >
-              <X size={24} />
+              <X size={20} className="sm:w-5 sm:h-5 md:w-6 md:h-6" />
             </button>
           </div>
         </div>
+
+        {/* Quick Switch (Scrollable Row) */}
+        <div className="flex overflow-x-auto gap-2 px-4 md:px-6 py-3 border-b border-slate-100 dark:border-slate-800 scrollbar-hide">
+          {Object.values(STATIONS).map((s) => (
+            <button
+              key={s.id}
+              onClick={() => setActiveStationId(s.id)}
+              className={`flex-shrink-0 text-[10px] sm:text-xs px-5 py-2 rounded-full font-black tracking-widest uppercase transition-all hover:scale-105 active:scale-95 ${activeStationId === s.id ? 'bg-[#20388F] dark:bg-[#F58220] text-white shadow-lg' : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700'}`}
+            >
+              {s.id}
+            </button>
+          ))}
+        </div>
         
         {/* Schedule Extension Segment */}
-        <div className="grid md:grid-cols-2 gap-4 p-5 md:p-6 bg-slate-50/50 dark:bg-slate-900/50 rounded-b-2xl">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4 p-4 md:p-6 bg-slate-50/50 dark:bg-slate-900/50 rounded-b-2xl max-h-[45vh] lg:max-h-[55vh] overflow-y-auto">
            {/* Current Show */}
-           <div className="flex items-center gap-4 bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-100 dark:border-slate-700 shadow-sm relative overflow-hidden group">
+           <div className="flex items-center gap-3 md:gap-4 bg-white dark:bg-slate-800 p-3 md:p-4 rounded-xl border border-slate-100 dark:border-slate-700 shadow-sm relative overflow-hidden group">
               <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-[#20388F] dark:bg-[#F58220]"></div>
-              <div className="w-14 h-14 rounded-full bg-blue-50 dark:bg-slate-700 flex items-center justify-center text-[#20388F] dark:text-[#F58220] flex-shrink-0">
-                <Mic2 size={24} />
+              <div className="w-10 h-10 md:w-14 md:h-14 rounded-full bg-blue-50 dark:bg-slate-700 flex items-center justify-center text-[#20388F] dark:text-[#F58220] flex-shrink-0">
+                <Mic2 size={20} className="md:w-6 md:h-6" />
               </div>
               <div className="flex-1 min-w-0">
-                 <div className="flex flex-wrap items-center gap-2 mb-1.5">
-                   <span className="bg-[#20388F]/10 dark:bg-[#F58220]/10 text-[#20388F] dark:text-[#F58220] text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded text-nowrap">Now Playing</span>
-                   <span className="text-slate-500 dark:text-slate-400 text-xs font-bold">{currentShow.time}</span>
+                 <div className="flex flex-wrap items-center gap-1.5 md:gap-2 mb-1">
+                   <span className="bg-[#20388F]/10 dark:bg-[#F58220]/10 text-[#20388F] dark:text-[#F58220] text-[9px] md:text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded text-nowrap">Now Playing</span>
+                   <span className="text-slate-500 dark:text-slate-400 text-[10px] md:text-xs font-bold">{currentShow.time}</span>
                  </div>
-                 <h4 className="font-bold text-slate-800 dark:text-slate-100 text-base truncate">{currentShow.name}</h4>
-                 <p className="text-slate-500 dark:text-slate-400 text-sm truncate mt-0.5">with {currentShow.host}</p>
+                 <h4 className="font-bold text-slate-800 dark:text-slate-100 text-sm md:text-base truncate">{currentShow.name}</h4>
+                 <p className="text-slate-500 dark:text-slate-400 text-xs md:text-sm truncate mt-0.5">with {currentShow.host}</p>
               </div>
            </div>
            
            {/* Next Show */}
-           <div className="flex items-center gap-4 bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-100 dark:border-slate-700 shadow-sm opacity-90 hover:opacity-100 transition-opacity group">
-              <div className="w-14 h-14 rounded-full bg-slate-50 dark:bg-slate-700/50 flex items-center justify-center text-slate-400 dark:text-slate-500 flex-shrink-0">
-                <Clock size={24} />
+           <div className="flex items-center gap-3 md:gap-4 bg-white dark:bg-slate-800 p-3 md:p-4 rounded-xl border border-slate-100 dark:border-slate-700 shadow-sm opacity-90 hover:opacity-100 transition-opacity group">
+              <div className="w-10 h-10 md:w-14 md:h-14 rounded-full bg-slate-50 dark:bg-slate-700/50 flex items-center justify-center text-slate-400 dark:text-slate-500 flex-shrink-0">
+                <Clock size={20} className="md:w-6 md:h-6" />
               </div>
               <div className="flex-1 min-w-0">
-                 <div className="flex flex-wrap items-center gap-2 mb-1.5">
-                   <span className="bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded text-nowrap">Up Next</span>
-                   <span className="text-slate-500 dark:text-slate-400 text-xs font-bold">{nextShow.time.split(' - ')[0]} • Run Time: {calculateRunTime(nextShow.time)}</span>
+                 <div className="flex flex-wrap items-center gap-1.5 md:gap-2 mb-1">
+                   <span className="bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-[9px] md:text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded text-nowrap">Up Next</span>
+                   <span className="text-slate-500 dark:text-slate-400 text-[10px] md:text-xs font-bold">{nextShow.time.split(' - ')[0]} • Run Time: {calculateRunTime(nextShow.time)}</span>
                  </div>
-                 <h4 className="font-bold text-slate-800 dark:text-slate-100 text-base truncate">{nextShow.name}</h4>
-                 <p className="text-slate-500 dark:text-slate-400 text-sm truncate mt-0.5">with {nextShow.host}</p>
+                 <h4 className="font-bold text-slate-800 dark:text-slate-100 text-sm md:text-base truncate">{nextShow.name}</h4>
+                 <p className="text-slate-500 dark:text-slate-400 text-xs md:text-sm truncate mt-0.5">with {nextShow.host}</p>
               </div>
            </div>
         </div>
