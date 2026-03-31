@@ -1,0 +1,48 @@
+@import "tailwindcss";
+
+/* 
+  Enable class-based and data-attribute dark mode for Tailwind CSS 4.
+  Redefines the built-in 'dark:' variant.
+*/
+@variant dark (&:where(.dark, .dark *, [data-theme="dark"], [data-theme="dark"] *));
+
+@layer base {
+  :root {
+    color-scheme: light dark;
+  }
+  
+  body {
+    @apply bg-white dark:bg-black font-sans text-black dark:text-white antialiased overflow-x-hidden;
+    background: radial-gradient(circle at 70% 30%, #f1f5f9 0%, #ffffff 70%);
+    background-attachment: fixed;
+  }
+  
+  .dark body {
+    background: radial-gradient(circle at 70% 30%, #1e293b 0%, #020617 70%);
+    background-attachment: fixed;
+  }
+}
+
+.text-spaced {
+  letter-spacing: 0.4em;
+}
+
+.hero-image-container {
+  border-bottom-left-radius: 12rem;
+  border-bottom-right-radius: 12rem;
+  overflow: hidden;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
+}
+
+.nav-link {
+  @apply text-sm font-bold uppercase tracking-widest hover:opacity-100 opacity-60 transition-all cursor-pointer;
+}
+
+.glow-cyan {
+  box-shadow: 0 0 80px -20px rgba(6, 182, 212, 0.3);
+}
+
+/* Optional: Smooth transitions for all themeable properties */
+* {
+  @apply transition-colors duration-300;
+}
