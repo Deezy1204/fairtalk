@@ -261,18 +261,18 @@ const HomeView = ({ setView, playStation }: { setView: (v: View) => void, playSt
     <div className="relative overflow-visible">
       
       {/* Sticky Hero Layer: Pinned in the background, anchored at the top */}
-      <div className="sticky top-0 z-0 h-screen w-full flex items-start bg-white dark:bg-black transition-colors duration-500 px-6 md:px-12">
-        <div className="max-w-[1500px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-5 items-start w-full">
+      <div className="sticky top-0 z-0 h-[100svh] w-full flex items-start bg-white dark:bg-black transition-colors duration-500 px-6 md:px-12 pt-32 lg:pt-0 overflow-hidden lg:overflow-visible">
+        <div className="max-w-[1500px] mx-auto flex flex-col lg:grid lg:grid-cols-12 gap-12 lg:gap-5 items-start w-full">
           
           {/* Left Column: Image Container (4/12 of the grid) */}
           <motion.div 
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 1.2, ease: "circOut" }}
-            className="relative lg:col-span-4"
+            className="relative lg:col-span-4 w-full -left-[50px] lg:left-0 hidden lg:block"
           >
             <div className="relative group/hero z-[110]">
-              <div className="hero-image-container glow-cyan w-full max-w-[280px] aspect-[1/2] lg:h-[520px] relative mx-auto lg:ml-24 xl:ml-32 bg-slate-100 dark:bg-slate-900 overflow-hidden rounded-b-[6rem]">
+              <div className="hero-image-container glow-cyan w-full max-w-[280px] aspect-[1/2] lg:h-[520px] relative mx-auto lg:ml-24 xl:ml-32 bg-slate-100 dark:bg-slate-900 overflow-hidden rounded-b-[6rem] shadow-2xl">
                 <img 
                   src="/heroimage.jpg" 
                   className="w-full h-full object-cover transition-all duration-1000" 
@@ -321,7 +321,7 @@ const HomeView = ({ setView, playStation }: { setView: (v: View) => void, playSt
           </motion.div>
 
           {/* Right Column: Hero Content (8/12 of the grid, padded to clear navbar) */}
-          <div className="lg:col-span-8 px-4 lg:px-0 pt-16 md:pt-24 lg:pt-32">
+          <div className="lg:col-span-8 px-0 lg:px-0 pt-0 lg:pt-32 z-10 w-full relative">
             <motion.div 
               initial={{ opacity: 0, x: 50 }}
               animate={{ opacity: 1, x: 0 }}
@@ -336,16 +336,22 @@ const HomeView = ({ setView, playStation }: { setView: (v: View) => void, playSt
                 UNICATIONS
               </h1>
 
-              <p className="text-base md:text-lg text-black/60 dark:text-white/60 max-w-none leading-relaxed mb-8 md:mb-10 font-medium">
+              <p className="text-base md:text-lg text-black/60 dark:text-white/60 max-w-none leading-relaxed mb-8 md:mb-10 font-medium z-20 relative bg-white/50 dark:bg-black/50 lg:bg-transparent p-4 lg:p-0 rounded-xl lg:rounded-none backdrop-blur-sm lg:backdrop-blur-none border border-black/5 lg:border-transparent dark:border-white/5">
                 Is a pioneering force in Zimbabwe's broadcasting industry, owning the popular <strong>Skyz Metro FM</strong> in Bulawayo and <strong>Breeze FM</strong> in Victoria Falls. We are dedicated to bringing diverse voices and fresh perspectives to the media landscape.
               </p>
 
-              <div className="flex flex-col sm:flex-row gap-6 items-start sm:items-center">
+              <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
                 <button 
                   onClick={() => setView('stations')}
                   className="bg-black dark:bg-white text-white dark:text-black px-5 py-2.5 rounded-full flex items-center gap-2 text-xs font-black uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-xl group"
                 >
                   Stations <ArrowRight size={14} className="group-hover:translate-x-1.5 transition-transform" />
+                </button>
+                <button 
+                  onClick={() => playStation('skyz')} 
+                  className="lg:hidden bg-[#F58220] hover:bg-[#F58220]/90 text-white px-5 py-2.5 rounded-full flex items-center gap-2 text-xs font-black uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-[0_0_15px_rgba(245,130,32,0.5)]"
+                >
+                  <Play size={14} fill="currentColor" /> Live Radio
                 </button>
               </div>
             </motion.div>
@@ -353,8 +359,8 @@ const HomeView = ({ setView, playStation }: { setView: (v: View) => void, playSt
         </div>
       </div>
 
-      {/* Scrollable Content Layer: Reduced margin for significantly faster arrival */}
-      <div className="relative z-10 bg-white dark:bg-black transition-colors duration-500 mt-[18vh] pt-20 pb-24 shadow-[0_-50px_100px_rgba(0,0,0,0.1)]">
+      {/* Scrollable Content Layer */}
+      <div className="relative z-10 bg-white dark:bg-black transition-colors duration-500 mt-[50svh] lg:mt-[45vh] pt-12 lg:pt-20 pb-24 shadow-[0_-50px_100px_rgba(0,0,0,0.1)]">
         
         {/* Corporate Overview */}
         <motion.div
@@ -1232,7 +1238,7 @@ const ThemeToggle = ({ theme, setTheme }: { theme: 'dark' | 'light', setTheme: (
 
 export default function App() {
   const [view, setView] = useState<View>('home');
-  const [theme, setTheme] = useState<'dark' | 'light'>('dark');
+  const [theme, setTheme] = useState<'dark' | 'light'>('light');
   const [activeStationId, setActiveStationId] = useState('skyz');
   const [isPlaying, setIsPlaying] = useState(false);
   const [isPlayerVisible, setIsPlayerVisible] = useState(false);
