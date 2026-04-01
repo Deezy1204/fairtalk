@@ -1,0 +1,7 @@
+# Go to the contacts page and change "Our Offices" to "Our Contacts", then remove the left side content which contains Bulawayo (HQ) and Victoria Falls, i need this section to use those accordions, remove the Heading "Department contacts" then inside the Sky metro fm accordion you'll have address (9th Floor, Pioneer House Corner 8th Avenue and Fife Street, Bulawayo, Zimbabwe), the the Departments contacts, same with the accordion of breeze fm
+# I also need a section on the home page that's going to talk about the radio frequences, Skyz metro fm being 100.3 and BreezeFm being 91.2, make it caatchy and nice
+# Then go to the news sections throughout the website and make sure you pull those news from the websites https://skyzmetroradio.co.zw and https://breezefm.co.zw/, also add the opening of full story in a full page to read the whole news
+# Then i need you to create the dashboard to be logged in to which is going to facilitate the uploading and managing of these on the database:
+ - Playing shows with their hosts and playing times as they display in the website
+ - Gallery images and their titles
+ - 
